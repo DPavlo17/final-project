@@ -7,7 +7,6 @@ bot = telebot.TeleBot('6639915150:AAESXmXwGP04nXgQnknc9jXdTGdnP5mSExg')
 API = 'f9663ef9687eeb6f2c4fda2d986ddd22'
 
 def get_weather_icon(weather_id):
-    # Можете додати більше умов для визначення іконки відповідно до weather_id
     if 200 <= weather_id < 300:
         return 'img_2.png'
     elif 300 <= weather_id < 600:
