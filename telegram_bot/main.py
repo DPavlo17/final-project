@@ -1,5 +1,7 @@
 import telebot
 from telebot import types
+import requests
+import json
 # import SQLite3
 bot = telebot.TeleBot('6639915150:AAESXmXwGP04nXgQnknc9jXdTGdnP5mSExg')
 API = 'f9663ef9687eeb6f2c4fda2d986ddd22'
@@ -28,8 +30,19 @@ def on_click(message):
 
 def get_weather(message):
     city = message.text.strip().lower()
-    # Тут ви можете додати логіку для отримання інформації про погоду для введеного міста
-    bot.send_message(message.chat.id, f'Інформація про погоду для міста {city}.')
+    res = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API}&units=metric')
+    if res.status_code == 200:
+
+        data = json.loads(res.text)
+        temperature = data["main"]["temp"]
+        bot.reply_to(message, f'Зараз погода: {temperature} градусів за цельсієм')
+
+        imagine = 'img.png' if temperature > 5.0 else 'img_1.png'
+        file = open('./' + imagine, 'rb')
+        bot.send_photo(message.chat.id,file)
+    else:
+        bot.reply_to(message, 'Назва міста вказана невірно')
+
 
 @bot.message_handler(commands=['start'])
 def main(message):
